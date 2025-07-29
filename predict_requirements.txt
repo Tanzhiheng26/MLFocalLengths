@@ -1,0 +1,11 @@
+torch
+torchvision
+tqdm
+piexif
+Pillow
+matplotlib
+configargparse
+numpy
+exifread
+rawpy
+opencv-python

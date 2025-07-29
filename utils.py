@@ -3,6 +3,8 @@
 import random
 import numpy as np
 import torch
+import cv2
+import glob
 
 import os
 
@@ -68,3 +70,35 @@ def plot_2dmatrix(matrix, fig=1, vmin=None, vmax=None):
     grid(True)
     colorbar()
     savefig('plot_outputs/last_plot.png')
+
+def video_to_frames(video_path, output_folder, n_frames):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
+    cap = cv2.VideoCapture(video_path)
+    frame_idx = 0
+
+    # Sample n_frames consecutive frames from start_index
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    max_start = max(0, total_frames - n_frames)
+    start_index = random.randint(0, max_start)
+    if n_frames > 0:
+        cap.set(cv2.CAP_PROP_POS_FRAMES, start_index)
+        frame_idx = start_index
+
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret or (n_frames > 0 and frame_idx >= start_index + n_frames):
+            break
+        
+        frame_filename = os.path.join(output_folder, f"frame_{frame_idx:05d}.jpg")
+        cv2.imwrite(frame_filename, frame)
+
+        frame_idx += 1
+    
+    cap.release()
+
+    images = glob.glob(os.path.join(output_folder, '*.jpg'))
+    images = sorted(images)
+    
+    return images
