@@ -1,3 +1,4 @@
+# conda create --name mlfl python=3.10
 torch
 torchvision
 tqdm
@@ -9,3 +10,5 @@ numpy
 exifread
 rawpy
 opencv-python
+scikit-learn
+h5py
